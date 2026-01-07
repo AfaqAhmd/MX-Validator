@@ -319,7 +319,7 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-5xl px-6 pt-20 pb-16">
           {/* Logo/Brand */}
-          <div className="mb-12 flex items-center justify-center gap-3">
+          {/* <div className="mb-12 flex items-center justify-center gap-3">
             <div className="glow-blue rounded-xl border border-[#0000EE]/20 bg-[#0000EE]/10 p-2.5">
               <Shield className="h-7 w-7 text-[#4d7fff]" />
             </div>
@@ -329,7 +329,7 @@ export default function Home() {
             >
               CYMATE
             </span>
-          </div>
+          </div> */}
 
           {/* Headline */}
           <div className="mx-auto mb-14 max-w-3xl text-center">
@@ -506,7 +506,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="border-[#1a1a1a] border-t py-10">
+      {/* <footer className="border-[#1a1a1a] border-t py-10">
         <div className="mx-auto max-w-5xl px-6 text-center">
           <div className="mb-3 flex items-center justify-center gap-2">
             <Shield className="h-4 w-4 text-[#4d7fff]" />
@@ -533,7 +533,7 @@ export default function Home() {
             of LeadMagic
           </p>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 }
