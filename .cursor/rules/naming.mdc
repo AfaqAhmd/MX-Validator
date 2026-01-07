@@ -1,0 +1,88 @@
+---
+description: File and code naming conventions
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+---
+
+# Naming Conventions
+
+## Files
+
+| Type | Convention | Example |
+|------|------------|---------|
+| Components | PascalCase | `UserCard.tsx` |
+| Utilities | camelCase | `validateEmail.ts` |
+| Hooks | camelCase with `use` | `useLocalStorage.ts` |
+| Types | PascalCase | `types.ts` |
+| Constants | camelCase file | `constants.ts` |
+
+## Code
+
+```typescript
+// ✅ Components: PascalCase
+export function EmailAnalytics() { }
+export function ResultsTable() { }
+
+// ✅ Functions/variables: camelCase
+const userEmail = "test@example.com";
+function validateEmail(email: string) { }
+
+// ✅ Constants: SCREAMING_SNAKE_CASE
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const API_ENDPOINTS = {
+  UPLOAD: "/api/upload",
+  SCAN: "/api/scan-mx",
+};
+
+// ✅ Types/Interfaces: PascalCase
+interface LeadData {
+  id: string;
+  email: string;
+}
+
+type ScanStatus = "pending" | "processing" | "completed";
+
+// ✅ Enums: PascalCase with PascalCase members
+enum Status {
+  Pending = "pending",
+  Processing = "processing",
+  Completed = "completed",
+}
+
+// ✅ Boolean variables: is/has/can prefix
+const isLoading = true;
+const hasError = false;
+const canSubmit = true;
+```
+
+## Don't
+
+```typescript
+// ❌ Inconsistent casing
+const User_email = "";
+function Validate_Email() { }
+
+// ❌ Abbreviations that aren't obvious
+const usr = getUser();
+const cfg = loadConfig();
+
+// ❌ Generic names
+const data = fetchData();
+const temp = process(input);
+const x = calculate();
+```
+
+## Descriptive Names
+
+```typescript
+// ✅ Clear intent
+const validatedEmails = emails.filter(isValidEmail);
+const totalLeadCount = leads.length;
+const processingStartTime = Date.now();
+
+// ✅ Action-oriented function names
+function calculateDeliverabilityScore() { }
+function extractEmailFromRow() { }
+function formatScanResults() { }
+```

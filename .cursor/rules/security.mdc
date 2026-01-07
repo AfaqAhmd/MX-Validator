@@ -1,0 +1,116 @@
+---
+description: Security best practices for input validation and data handling
+globs:
+  - "**/api/**/*.ts"
+  - "**/app/**/*.ts"
+---
+
+# Security Rules
+
+## Do
+
+```typescript
+// ✅ Validate all user input
+export async function POST(request: Request) {
+  const body = await request.json();
+
+  if (!body.email || typeof body.email !== "string") {
+    return NextResponse.json(
+      { error: "Email is required" },
+      { status: 400 },
+    );
+  }
+
+  if (!isValidEmail(body.email)) {
+    return NextResponse.json(
+      { error: "Invalid email format" },
+      { status: 400 },
+    );
+  }
+
+  // Process validated input...
+}
+
+// ✅ Sanitize data before storage
+function sanitizeEmail(email: string): string {
+  return email.trim().toLowerCase().slice(0, 255);
+}
+
+// ✅ Use generic error messages externally
+return NextResponse.json(
+  { error: "An error occurred" },
+  { status: 500 },
+);
+
+// ✅ Log detailed errors internally
+console.error("Database error:", error);
+```
+
+## Don't
+
+```typescript
+// ❌ Never expose sensitive data in errors
+return NextResponse.json({
+  error: `Database connection failed: ${connectionString}`,
+});
+
+// ❌ Never trust user input directly
+const email = body.email; // Use without validation
+await db.insert(leads).values({ email });
+
+// ❌ Never expose stack traces
+return NextResponse.json({ error: error.stack });
+
+// ❌ Never log sensitive data
+console.log("User password:", password);
+```
+
+## Input Validation Helpers
+
+```typescript
+// Email validation
+function isValidEmail(email: string): boolean {
+  if (typeof email !== "string") return false;
+  if (email.length > 255) return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+// Domain validation
+function isValidDomain(domain: string): boolean {
+  if (typeof domain !== "string") return false;
+  if (domain.length > 255) return false;
+  return /^[a-zA-Z0-9][a-zA-Z0-9-]*\.[a-zA-Z]{2,}$/.test(domain);
+}
+
+// Sanitize string
+function sanitizeString(input: string): string {
+  return input.trim().slice(0, 255);
+}
+
+// Validate array bounds
+function isValidLimit(limit: number): boolean {
+  return Number.isInteger(limit) && limit > 0 && limit <= 1000;
+}
+```
+
+## File Upload Security
+
+```typescript
+// ✅ Validate file type
+const ALLOWED_TYPES = ["text/csv", "application/csv"];
+if (!ALLOWED_TYPES.includes(file.type)) {
+  return { error: "Only CSV files allowed" };
+}
+
+// ✅ Limit file size
+const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+if (file.size > MAX_SIZE) {
+  return { error: "File too large" };
+}
+
+// ✅ Limit row count
+const MAX_ROWS = 10000;
+if (rows.length > MAX_ROWS) {
+  return { error: `Maximum ${MAX_ROWS} rows allowed` };
+}
+```

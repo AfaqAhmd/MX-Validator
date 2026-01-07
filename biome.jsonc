@@ -1,0 +1,52 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"],
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**/*",
+      "!.next",
+      "!node_modules",
+      "!drizzle",
+      "!*.config.ts",
+      "!*.config.mjs"
+    ]
+  },
+  "linter": {
+    "rules": {
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "off"
+      },
+      "nursery": {
+        "noIncrementDecrement": "off",
+        "noLeakedRender": "warn"
+      },
+      "style": {
+        "useBlockStatements": "off",
+        "useConsistentTypeDefinitions": "off",
+        "noNestedTernary": "off",
+        "noNonNullAssertion": "warn",
+        "useDefaultSwitchClause": "warn",
+        "noExportedImports": "off",
+        "useCollapsedIf": "warn"
+      },
+      "performance": {
+        "useTopLevelRegex": "warn",
+        "noNamespaceImport": "off",
+        "noBarrelFile": "off",
+        "noImgElement": "warn"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "warn"
+      },
+      "a11y": {
+        "useButtonType": "warn"
+      }
+    }
+  }
+}

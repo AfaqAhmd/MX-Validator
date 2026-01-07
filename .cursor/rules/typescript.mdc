@@ -1,0 +1,74 @@
+---
+description: TypeScript best practices and patterns
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+---
+
+# TypeScript Rules
+
+## Do
+
+```typescript
+// ✅ Use explicit return types for public functions
+export function calculateTotal(items: Item[]): number {
+  return items.reduce((sum, item) => sum + item.price, 0);
+}
+
+// ✅ Use interfaces for object shapes
+interface User {
+  id: string;
+  email: string;
+  name: string;
+}
+
+// ✅ Use type aliases for unions
+type Status = "pending" | "completed" | "failed";
+
+// ✅ Use unknown for truly unknown types
+function parseJSON(input: string): unknown {
+  return JSON.parse(input);
+}
+
+// ✅ Use const assertions for literal types
+const ROUTES = {
+  home: "/",
+  upload: "/upload",
+} as const;
+```
+
+## Don't
+
+```typescript
+// ❌ Never use any
+function processData(data: any) { }
+
+// ❌ Avoid non-null assertions without justification
+const value = obj.property!;
+
+// ❌ Don't use var
+var count = 0;
+
+// ❌ Don't leave unused variables
+const unused = "never used";
+
+// ❌ Don't use == for comparisons
+if (value == null) { }
+```
+
+## Patterns
+
+```typescript
+// Prefer const over let
+const items = [];
+items.push("item"); // ✅ Mutation is fine
+
+// Use template literals
+const message = `Hello, ${name}!`;
+
+// Use optional chaining
+const value = obj?.nested?.property;
+
+// Use nullish coalescing
+const result = value ?? defaultValue;
+```

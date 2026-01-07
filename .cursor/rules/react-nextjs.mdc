@@ -1,0 +1,91 @@
+---
+description: React and Next.js patterns and best practices
+globs:
+  - "**/*.tsx"
+  - "**/app/**/*.ts"
+---
+
+# React & Next.js Rules
+
+## Do
+
+```tsx
+// ✅ Use function components with hooks
+export function UserCard({ user }: { user: User }) {
+  const [isOpen, setIsOpen] = useState(false);
+  return <div>{user.name}</div>;
+}
+
+// ✅ Prefer named exports
+export function Button({ children }: ButtonProps) {
+  return <button>{children}</button>;
+}
+
+// ✅ Use Next.js Image component
+import Image from "next/image";
+<Image src="/logo.png" alt="Logo" width={100} height={100} />
+
+// ✅ Use Next.js Link component
+import Link from "next/link";
+<Link href="/about">About</Link>
+
+// ✅ Keep components focused and small
+export function EmailBadge({ status }: { status: string }) {
+  return <Badge variant={status}>{status}</Badge>;
+}
+```
+
+## Don't
+
+```tsx
+// ❌ Avoid React.FC (use explicit props)
+const Button: React.FC<Props> = ({ children }) => { };
+
+// ❌ Don't use img tag
+<img src="/logo.png" alt="Logo" />
+
+// ❌ Don't use anchor tags for internal links
+<a href="/about">About</a>
+
+// ❌ Avoid inline styles when Tailwind classes exist
+<div style={{ marginTop: "16px" }}>
+
+// ❌ Don't create massive components
+// Split into smaller, focused pieces
+```
+
+## Server vs Client Components
+
+```tsx
+// Server Component (default) - no "use client"
+// ✅ Can fetch data directly
+export default async function Page() {
+  const data = await fetchData();
+  return <DataDisplay data={data} />;
+}
+
+// Client Component - needs "use client"
+"use client";
+// ✅ Can use hooks, event handlers
+export function InteractiveForm() {
+  const [value, setValue] = useState("");
+  return <input onChange={(e) => setValue(e.target.value)} />;
+}
+```
+
+## API Routes (App Router)
+
+```typescript
+// src/app/api/example/route.ts
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  return NextResponse.json({ data: "value" });
+}
+
+export async function POST(request: Request) {
+  const body = await request.json();
+  // Validate input before processing
+  return NextResponse.json({ success: true });
+}
+```

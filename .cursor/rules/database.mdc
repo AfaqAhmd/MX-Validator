@@ -1,0 +1,91 @@
+---
+description: Drizzle ORM and database best practices
+globs:
+  - "**/db/**/*.ts"
+  - "**/api/**/*.ts"
+---
+
+# Database Rules (Drizzle ORM)
+
+Schema location: `src/lib/db/schema.ts`
+
+## Do
+
+```typescript
+// ✅ Use type-safe query builder
+import { db } from "@/lib/db";
+import { leads, scans } from "@/lib/db/schema";
+import { eq, and, desc } from "drizzle-orm";
+
+// ✅ Simple select
+const allLeads = await db.select().from(leads);
+
+// ✅ Select with conditions
+const activeScan = await db
+  .select()
+  .from(scans)
+  .where(eq(scans.status, "processing"))
+  .limit(1);
+
+// ✅ Insert with returning
+const [newLead] = await db
+  .insert(leads)
+  .values({
+    email: sanitizedEmail,
+    scanId: scanId,
+  })
+  .returning();
+
+// ✅ Update with conditions
+await db
+  .update(leads)
+  .set({ status: "validated" })
+  .where(eq(leads.id, leadId));
+
+// ✅ Use transactions for multi-step operations
+await db.transaction(async (tx) => {
+  await tx.update(scans).set({ status: "completed" });
+  await tx.update(leads).set({ processed: true });
+});
+```
+
+## Don't
+
+```typescript
+// ❌ Never use raw SQL without parameterization
+await db.execute(`SELECT * FROM leads WHERE email = '${email}'`);
+
+// ❌ Don't skip input validation
+const lead = await db.insert(leads).values(req.body); // Dangerous!
+
+// ❌ Don't ignore errors
+await db.insert(leads).values(data); // Should handle errors
+```
+
+## Validation Pattern
+
+```typescript
+// ✅ Always validate before database operations
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function sanitizeString(input: string): string {
+  return input.trim().toLowerCase().slice(0, 255);
+}
+
+// Then use:
+if (!isValidEmail(input)) {
+  throw new Error("Invalid email");
+}
+const sanitized = sanitizeString(input);
+await db.insert(leads).values({ email: sanitized });
+```
+
+## Commands
+
+```bash
+pnpm db:push      # Push schema changes
+pnpm db:generate  # Generate migrations
+pnpm db:studio    # Open Drizzle Studio GUI
+```

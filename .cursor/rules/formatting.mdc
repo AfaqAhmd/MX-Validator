@@ -1,0 +1,93 @@
+---
+description: Biome/Ultracite formatting and linting rules
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.json"
+  - "**/*.css"
+---
+
+# Formatting Rules (Biome/Ultracite)
+
+## Core Settings
+
+| Setting | Value |
+|---------|-------|
+| Quotes | Double `"` |
+| Semicolons | Always |
+| Indentation | Tabs (width: 2) |
+| Line width | 80 characters |
+| Trailing commas | All |
+| JSX quotes | Double |
+
+## Do
+
+```typescript
+// ✅ Double quotes
+const name = "Jesse";
+
+// ✅ Semicolons
+const value = 42;
+
+// ✅ Trailing commas
+const obj = {
+  first: 1,
+  second: 2,
+};
+
+// ✅ Arrow functions for callbacks
+items.map((item) => item.value);
+
+// ✅ Template literals
+const greeting = `Hello, ${name}!`;
+```
+
+## Don't
+
+```typescript
+// ❌ Single quotes
+const name = 'Jesse';
+
+// ❌ Missing semicolons
+const value = 42
+
+// ❌ No trailing commas
+const obj = {
+  first: 1,
+  second: 2
+};
+```
+
+## Import Organization
+
+```typescript
+// ✅ Correct order: external → internal → relative
+import { NextResponse } from "next/server";
+import { useState } from "react";
+
+import { db } from "@/lib/db";
+import { Button } from "@/components/ui/button";
+
+import { localHelper } from "./helpers";
+import type { LocalType } from "./types";
+```
+
+## Biome Ignore Comments
+
+```typescript
+// When you must disable a rule:
+// biome-ignore lint/category/ruleName: explanation why
+
+// Example:
+// biome-ignore lint/security/noDangerouslySetInnerHtml: content is sanitized
+<div dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
+```
+
+## Commands
+
+```bash
+pnpm check    # Check for issues
+pnpm fix      # Auto-fix issues
+```
